@@ -46,16 +46,24 @@ void ocenCiag(int* ciag_wylosowany, int* ciag_wejsciowy, Ocena* ciag_wyjsciowy)
 		{
 			ciag_wyjsciowy[i] = TRAFIONE;
 			ilosc_kolor_wejsciowy[kolor_gracz] -= 1;
+			ilosc_kolor_wylosow[kolor_gracz] -= 1;
 		}
 		else 
 		{
 			if (ilosc_kolor_wejsciowy[kolor_gracz] <= 0 || ilosc_kolor_wylosow[kolor_gracz] <= 0) 
 			{
-				
+			    ciag_wyjsciowy[i] = BRAK;
+		            continue;	    
 			}
 			for (int j = 0; j < OC_ROZMIAR_CIAGU; j++) 
 			{
-
+				if (kolor_gracz == ciag_wylosowany[j]) 
+				{
+					ciag_wyjsciowy[i] = ISTNIEJE_NIE_TUTAJ;
+					ilosc_kolor_wejsciowy[kolor_gracz] -= 1;
+					ilosc_kolor_wylosow[kolor_gracz] -= 1;
+					continue;
+				}
 			}
 
 		}
