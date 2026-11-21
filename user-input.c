@@ -14,11 +14,11 @@ void ocenCiag(int *ciag_wylosowany, int *ciag_wejsciowy, Ocena *ciag_wyjsciowy);
 
 #define ROZMIAR 4
 #define MAX_PROB 10
-#define ZAKRES_KOLOR 6 /* kolory 0-5 */
+#define ZAKRES_KOLOR 5 /* kolory 0-4 */
 
 static void wczytaj_probe(int *proba)
 {
-    printf("Podaj 4 cyfry (0-5):\n");
+    printf("Podaj 4 cyfry (0-4):\n");
     for (int i = 0; i < ROZMIAR; i++)
     {
         while (1)
@@ -29,12 +29,12 @@ static void wczytaj_probe(int *proba)
                 while (getchar() != '\n')
                 {
                 }
-                printf("Bledne dane. Podaj cyfre 0-5.\n");
+                printf("Bledne dane. Podaj cyfre 0-4.\n");
                 continue;
             }
             if (proba[i] >= 0 && proba[i] < ZAKRES_KOLOR)
                 break;
-            printf("Liczba spoza zakresu! Podaj cyfre 0-5.\n");
+            printf("Liczba spoza zakresu! Podaj cyfre 0-4.\n");
         }
     }
 }
@@ -53,6 +53,22 @@ static void pokaz_oceny(const Ocena *o)
     printf("\n");
 }
 
+static void pokaz_podsumowanie(const Ocena *o)
+{
+    int trafione = 0, istnieje = 0, brak = 0;
+    for (int i = 0; i < ROZMIAR; i++)
+    {
+        if (o[i] == TRAFIONE)
+            trafione++;
+        else if (o[i] == ISTNIEJE_NIE_TUTAJ)
+            istnieje++;
+        else
+            brak++;
+    }
+    printf("        T (trafione): %d, I (istnieje nie tutaj): %d, . (brak): %d\n",
+           trafione, istnieje, brak);
+}
+
 int main(void)
 {
     srand((unsigned)time(NULL));
@@ -63,13 +79,19 @@ int main(void)
 
     losuj(kod); /* silnik.c */
 
+    printf("Gra Mastermind - odgadnij 4-cyfrowy kod (cyfry 0-4).\n");
+    printf("Legenda: T = trafione, I = istnieje nie tutaj, . = brak\n");
+
     for (int proby = 1; proby <= MAX_PROB; proby++)
     {
+        printf("\n--- Proba %d/%d ---\n", proby, MAX_PROB);
+
         wczytaj_probe(proba);
         ocenCiag(kod, proba, oceny); /* oceny.c */
 
-        printf("Ocena: ");
+        printf("Ocena:  ");
         pokaz_oceny(oceny);
+        pokaz_podsumowanie(oceny);
 
         int trafione = 0;
         for (int i = 0; i < ROZMIAR; i++)
@@ -81,10 +103,9 @@ int main(void)
             printf("Wygrales w %d probach!\n", proby);
             return 0;
         }
-        printf("Proby: %d/%d\n", proby, MAX_PROB);
     }
 
-    printf("Przegrales. Kod: ");
+    printf("\nPrzegrales. Kod: ");
     for (int i = 0; i < ROZMIAR; i++)
         printf("%d ", kod[i]);
     printf("\n");
