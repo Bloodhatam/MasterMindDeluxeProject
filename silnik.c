@@ -8,16 +8,15 @@
 // 3 - zolty
 // 4 - fioletowy
 
-int losuj(){
+void losuj(int *tab)
+{
 	srand(time(NULL));
 
 	int min = 0;
 	int max = 4;
 
-	int losy[5] = {};
-
-	for(int i = 0; i < 4; i++){
-		losy[i] = (rand() % (max - min + 1)) + min;
-		printf("%d ", losy[i]);
+	for (int i = 0; i < 4; i++)
+	{
+		tab[i] = (rand() % (max - min + 1)) + min;
 	}
 }
